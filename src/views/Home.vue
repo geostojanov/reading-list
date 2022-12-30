@@ -18,6 +18,7 @@
 <script>
 import CreateBookForm from '@/components/CreateBookForm'
 import getCollection from '@/composables/getCollection'
+import getUser from '@/composables/getUser'
 
 // firebase imports
 import { db } from '../firebase/config'
@@ -28,7 +29,12 @@ export default {
   components: { CreateBookForm },
   setup() {
     
-    const { documents: books } = getCollection('books')
+    const { user } = getUser()
+    
+    const { documents: books } = getCollection(
+      'books',
+      ['userUid', '==', user.value.uid]
+    )
     
     const handleDelete = (book) => {
       const docRef = doc(db, 'books', book.id)
@@ -51,36 +57,36 @@ export default {
 </script>
 
 <style>
-.home ul {
-  padding: 0;
-}
-.home li {
-  list-style-type: none;
-  background: #fff;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  display: flex;
-}
-.home li .details {
-  margin-right: auto;
-}
-.home li h3 {
-  margin: 0;
-  margin-bottom: 4px;
-}
-.home li h3:hover {
-  cursor: pointer;
-  text-decoration: line-through;
-}
-.home li p {
-  margin: 0;
-}
-.icon {
-  color: #bbbbbb;
-  cursor: pointer;
-}
-.icon.fav {
-  color: #f83f5e
-}
+  .home ul {
+    padding: 0;
+  }
+  .home li {
+    list-style-type: none;
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    display: flex;
+  }
+  .home li .details {
+    margin-right: auto;
+  }
+  .home li h3 {
+    margin: 0;
+    margin-bottom: 4px;
+  }
+  .home li h3:hover {
+    cursor: pointer;
+    text-decoration: line-through;
+  }
+  .home li p {
+    margin: 0;
+  }
+  .icon {
+    color: #bbbbbb;
+    cursor: pointer;
+  }
+  .icon.fav {
+    color: #f83f5e
+  }
 </style>

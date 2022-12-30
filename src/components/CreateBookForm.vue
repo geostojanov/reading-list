@@ -14,6 +14,9 @@
 
 <script>
 import { ref } from 'vue'
+import getUser from '@/composables/getUser'
+
+// firebase imports
 import { db } from '../firebase/config'
 import { addDoc, collection } from 'firebase/firestore'
 
@@ -21,6 +24,7 @@ export default {
   setup() {
     const title = ref('')
     const author = ref('')
+    const { user } = getUser()
 
     const handleSubmit = async () => {
       console.log(title.value, author.value)
@@ -28,7 +32,8 @@ export default {
       await addDoc(colRef, {
         title: title.value,
         author: author.value,
-        isFav: false
+        isFav: false,
+        userUid: user.value.uid
       })
       
       // reset form
